@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WantedXTickets</string>
+    <string name="create_account">Create Account</string>
+    <string name="account_information">Account Information</string>
+    <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
+    <string name="account_name">SN:</string>
+    <string name="post_it">Post It!</string>
+    <string name="wanted_tickets">Wanted X Tickets</string>
 </resources>
