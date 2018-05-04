@@ -7,4 +7,10 @@
     <string name="account_name">SN:</string>
     <string name="post_it">Post It!</string>
     <string name="wanted_tickets">Wanted X Tickets</string>
+    <string name="hip_hop_title">Hip-Hop!</string>
+    <string name="festival_title">Music Festivals!</string>
+    <string name="country_title">Country!</string>
+    <string name="edm_title">EDM!</string>
+    <string name="musical_title">Musical!</string>
+
 </resources>
