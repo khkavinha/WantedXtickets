@@ -21,7 +21,7 @@ public class TicketsContract {
         public static final String KEY_PRICE = "price";
         public static final String KEY_LOCATION = "location";
         public static final String KEY_DESCRIPTION = "description";
-        public static final String KEY_GENGRE = "genre";
+        public static final String KEY_GENRE = "genre";
         public static final String KEY_IMAGE = "image";
         public static final String KEY_PASSWORD = "password";
         public static final String KEY_REVIEWS_ACCT = "reviews_account";

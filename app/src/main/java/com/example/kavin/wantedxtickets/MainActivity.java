@@ -1,5 +1,7 @@
 package com.example.kavin.wantedxtickets;
 
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,12 +9,18 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.example.kavin.wantedxtickets.Adapter.FragmentPagerAdapter;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tool_bar)
     Toolbar toolbar;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
+    @BindView(R.id.sliding_tabs)
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(fragmentPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
