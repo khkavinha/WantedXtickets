@@ -16,16 +16,12 @@ public class TicketsContract {
 
         public static final String TICKETS_DB_TABLE_NAME = "results";
         public static final String KEY_ID = "id";
-        public static final String KEY_ACCOUNT_NAME = "account_name";
+        public static final String KEY_THREAD_TITLE = "thread_title";
         public static final String KEY_DATE = "date";
         public static final String KEY_PRICE = "price";
         public static final String KEY_LOCATION = "location";
         public static final String KEY_DESCRIPTION = "description";
         public static final String KEY_GENRE = "genre";
-        public static final String KEY_IMAGE = "image";
-        public static final String KEY_PASSWORD = "password";
-        public static final String KEY_REVIEWS_ACCT = "reviews_account";
-        public static final String KEY_REVIEWS_DESCRIPTION = "reviews_description";
-        public static final String KEY_RATING = "rating";
+        public static final String KEY_TICKET_IMAGE = "ticket_image";
     }
 }

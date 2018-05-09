@@ -20,20 +20,13 @@ public class TicketsDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_TICKETS_DATABASE =
                 "CREATE TABLE " + TICKETS_DB_TABLE_NAME + " (" +
-
                         TicketsContract.TicketsEntry.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        TicketsContract.TicketsEntry.KEY_ACCOUNT_NAME + " TEXT NOT NULL," +
+                        TicketsContract.TicketsEntry.KEY_THREAD_TITLE + " TEXT NOT NULL," +
                         TicketsContract.TicketsEntry.KEY_DATE + " INTEGER NOT NULL," +
                         TicketsContract.TicketsEntry.KEY_PRICE + " INTEGER NOT NULL, " +
                         TicketsContract.TicketsEntry.KEY_LOCATION + " TEXT NOT NULL," +
                         TicketsContract.TicketsEntry.KEY_DESCRIPTION + " TEXT NOT NULL," +
-                        TicketsContract.TicketsEntry.KEY_GENRE + " INTEGER NOT NULL, " +
-                        TicketsContract.TicketsEntry.KEY_IMAGE + " TEXT NOT NULL," +
-                        TicketsContract.TicketsEntry.KEY_PASSWORD + " INTEGER NOT NULL, " +
-                        TicketsContract.TicketsEntry.KEY_REVIEWS_ACCT + " TEXT NOT NULL," +
-                        TicketsContract.TicketsEntry.KEY_REVIEWS_DESCRIPTION + " TEXT NOT NULL," +
-                        TicketsContract.TicketsEntry.KEY_RATING + " TEXT NOT NULL," +
-                        " UNIQUE (" + TicketsContract.TicketsEntry.KEY_REVIEWS_DESCRIPTION + ") ON CONFLICT REPLACE);";
+                        TicketsContract.TicketsEntry.KEY_GENRE + " INTEGER NOT NULL)";
         sqLiteDatabase.execSQL(SQL_CREATE_TICKETS_DATABASE);
     }
 

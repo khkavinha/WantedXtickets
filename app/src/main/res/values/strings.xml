@@ -13,5 +13,20 @@
     <string name="edm_title">EDM</string>
     <string name="musical_title">Musical</string>
     <string name="user">User: </string>
-
+    <string name="cp_post">Post Title: </string>
+    <string name="cp_prices">Price: $$</string>
+    <string name="cp_dates">Date: </string>
+    <string name="cp_image">Upload Image:</string>
+    <string name="cp_hint_dates">Exp (MM/DD/YYYY)</string>
+    <string name="cp_description">Description: </string>
+    <string name="cp_upload">Upload</string>
+    <string name="cp_select">Select</string>
+    <string-array name="genres_lists">
+        <item>EDM</item>
+        <item>HIP-HOP</item>
+        <item>COUNTRY</item>
+        <item>MUSICAL</item>
+        <item>MUSIC FESTIVALS</item>
+    </string-array>
+    <string name="title_activity_create_post">CreatePost</string>
 </resources>

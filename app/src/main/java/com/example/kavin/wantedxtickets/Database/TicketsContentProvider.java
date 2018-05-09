@@ -12,18 +12,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.PATH_TICKETS_STORE_DB;
-import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_ACCOUNT_NAME;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_DATE;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_DESCRIPTION;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_GENRE;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_ID;
-import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_IMAGE;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_LOCATION;
-import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_PASSWORD;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_PRICE;
-import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_RATING;
-import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_REVIEWS_ACCT;
-import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_REVIEWS_DESCRIPTION;
+import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_THREAD_TITLE;
+import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.KEY_TICKET_IMAGE;
 import static com.example.kavin.wantedxtickets.Database.TicketsContract.TicketsEntry.TICKETS_DB_TABLE_NAME;
 
 public class TicketsContentProvider extends ContentProvider {
@@ -63,17 +59,12 @@ public class TicketsContentProvider extends ContentProvider {
                         PATH_TICKETS_STORE_DB,
                         null,
                         KEY_ID + " = ? " +
-                                KEY_ACCOUNT_NAME + " = ? " +
+                                KEY_THREAD_TITLE + " = ? " +
                                 KEY_DATE + " = ? " +
                                 KEY_PRICE + " = ? " +
                                 KEY_LOCATION + " = ? " +
                                 KEY_DESCRIPTION + " = ? " +
-                                KEY_GENRE + " = ? " +
-                                KEY_IMAGE + " = ? " +
-                                KEY_PASSWORD + " = ? " +
-                                KEY_REVIEWS_ACCT + " = ? " +
-                                KEY_REVIEWS_DESCRIPTION + " = ? " +
-                                KEY_RATING + " = ? ",
+                                KEY_GENRE + " = ? ",
                         selectionArguments,
                         null,
                         null,
@@ -152,7 +143,20 @@ public class TicketsContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        throw new UnsupportedOperationException("Not yet Implemented");
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        final SQLiteDatabase db = mTicketsDBHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+        int rows = 0;
+        switch (match) {
+            case TASKS:
+                rows = db.update(TICKETS_DB_TABLE_NAME, values, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        if (rows != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rows;
     }
 }
