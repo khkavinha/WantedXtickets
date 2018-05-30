@@ -21,6 +21,9 @@
     <string name="cp_description">Description: </string>
     <string name="cp_upload">Upload</string>
     <string name="cp_select">Select</string>
+    <string name="max_strings">Max of 400 texts</string>
+    <string name="submit_buttons">Submit!</string>
+    <string name="submitClickHandler">SubmitClickHandler</string>
     <string-array name="genres_lists">
         <item>EDM</item>
         <item>HIP-HOP</item>

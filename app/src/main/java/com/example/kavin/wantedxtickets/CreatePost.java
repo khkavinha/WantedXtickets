@@ -1,19 +1,31 @@
 package com.example.kavin.wantedxtickets;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.example.kavin.wantedxtickets.HelperClasses.DateInputMask;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,9 +39,17 @@ public class CreatePost extends AppCompatActivity {
     Button bttnSelect;
     @BindView(R.id.bttnUpload)
     Button bttnUpload;
+    @BindView(R.id.descriptionTexts)
+    TextInputEditText descriptionTexts;
+    @BindView(R.id.submitButton)
+    Button submitButtons;
 
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
+    private FirebaseStorage storage;
+    StorageReference storageReference;
+    private DatabaseReference mMessagesDatabaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,63 +62,10 @@ public class CreatePost extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        TextWatcher tw = new TextWatcher() {
-            private String current = "";
-            private String mmddyyyy = "MMDDYYYY";
-            private Calendar cal = Calendar.getInstance();
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        new DateInputMask(textInputEditText);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().equals(current)) {
-                    String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
-                    String cleanC = current.replaceAll("[^\\d.]|\\.", "");
-
-                    int cl = clean.length();
-                    int sel = cl;
-                    for (int i = 2; i <= cl && i < 6; i += 2) {
-                        sel++;
-                    }
-                    //Fix for presing delete next to a forward slash
-                    if (clean.equals(cleanC)) sel--;
-                    if (clean.length() < 8) {
-                        clean = clean + mmddyyyy.substring(clean.length());
-                    } else {
-                        //This part makes sure that we are entering numbers
-                        //the date is correct, fixing it otherwise
-                        int day = Integer.parseInt(clean.substring(0,2));
-                        int mon = Integer.parseInt(clean.substring(2,4));
-                        int year = Integer.parseInt(clean.substring(4,8));
-
-                        mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
-                        cal.set(Calendar.MONTH, mon - 1);
-                        year = (year < 1900) ? 1900 : (year > 2100) ? 2100 : year;
-                        cal.set(Calendar.YEAR, year);
-
-                        day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
-                        clean = String.format("%02d%02d%02d",day, mon, year);
-                    }
-                    clean = String.format("%s/%s/%s", clean.substring(0,2),
-                    clean.substring(2,4),
-                    clean.substring(4,8));
-
-                    sel = sel < 0 ? 0 : sel;
-                    current = clean;
-                    textInputEditText.setText(current);
-                    textInputEditText.setSelection(sel < current.length() ? sel : current.length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        };
-
-        textInputEditText.addTextChangedListener(tw);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         bttnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +88,10 @@ public class CreatePost extends AppCompatActivity {
         return true;
     }
 
+    public void myClickHandler(View target) {
+
+    }
+
     private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -130,6 +101,36 @@ public class CreatePost extends AppCompatActivity {
 
 
     private void uploadImage() {
+        if (filePath != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
 
+            StorageReference ref = storageReference.child("image/" + UUID.randomUUID().toString());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreatePost.this, "Upload", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreatePost.this, "FAILED" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
     }
 }
